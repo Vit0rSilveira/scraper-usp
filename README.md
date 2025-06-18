@@ -17,11 +17,11 @@ Este manual foi criado para guiar qualquer pessoa, mesmo sem conhecimento prévi
     d.  **ATENÇÃO: Configurando o Caminho do Executável do Chrome (`binary_location`)**
         i.   Cenário 1: Chrome Instalado em Local Padrão (Recomendado - Abordagem Adotada)
         ii.  Cenário 2: Chrome Instalado em Local Personalizado/Portátil (Como Configurar)
-5.  **Executando o Projeto de Raspagem de Dados [ATUALIZADO]**
+5.  **Executando o Projeto de Raspagem de Dados**
     a.  Como Rodar o Script
-    b.  Saída no Terminal [NOVO]
-    c.  Relatórios Salvos em Pastas (Por Unidade) [NOVO]
-6.  **Estrutura de Pastas e Arquivos do Projeto [ATUALIZADO]**
+    b.  Saída no Terminal
+    c.  Relatórios Salvos em Pastas (Por Unidade)
+6.  **Estrutura de Pastas e Arquivos do Projeto**
 7.  **Solução de Problemas Comuns *FAQ***
 8.  **Contribuições e Licença**
 
@@ -33,7 +33,7 @@ Este projeto consiste em um script Python que utiliza a biblioteca Selenium para
 
 O objetivo principal é fornecer uma forma eficiente para coletar informações acadêmicas de forma estruturada, que de outra forma seriam de difícil acesso manual em larga escala.
 
-## 2. Requisitos Mínimos do Sistema [NOVO]
+## 2. Requisitos Mínimos do Sistema
 
 Para executar este projeto, você precisará de:
 
@@ -205,7 +205,7 @@ Lembre-se de salvar o arquivo scraper.py após fazer a alteração!
     python main.py
     ```
 
-### b. Saída no Terminal [NOVO]
+### b. Saída no Terminal
 
 Durante a execução, o script exibirá informações no terminal sobre o progresso da raspagem de dados, incluindo:
 
@@ -215,7 +215,7 @@ Durante a execução, o script exibirá informações no terminal sobre o progre
 * Mensagens de depuração ("DEBUG") que podem ajudar a entender o fluxo.
 * Um resumo final dos dados raspados (listas de unidades, cursos, disciplinas únicas, disciplinas em múltiplos cursos, e as mais comuns globalmente).
 
-### c. Relatórios Salvos em Pastas (Por Unidade) [NOVO]
+### c. Relatórios Salvos em Pastas (Por Unidade)
 
 Além da saída no terminal, o projeto gera relatórios detalhados em arquivos de texto (`.txt`).
 
@@ -228,7 +228,7 @@ Além da saída no terminal, o projeto gera relatórios detalhados em arquivos d
     * Uma análise das disciplinas que aparecem em múltiplos cursos **desta unidade**.
     * Uma lista das disciplinas mais comuns (top 15) em **todos os cursos raspados globalmente**.
 
-## 6. Estrutura de Pastas e Arquivos do Projeto [ATUALIZADO]
+## 6. Estrutura de Pastas e Arquivos do Projeto
 
 O projeto é organizado da seguinte forma:
 ```
