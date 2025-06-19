@@ -21,16 +21,16 @@ class ReportWriter:
         e as mais comuns (globalmente).
 
         Args:
-            all_units_data (list): Lista de objetos Unidade com os dados raspados.
+            all_units_data (list): Lista de objetos Unidade com os dados coletados.
             all_unique_disciplines (dict): Opcional. Dicionário {codigo_disciplina: Disciplina_obj}.
             discipline_to_courses_map (dict): Opcional. Dicionário {codigo_disciplina: [Curso_obj1, Curso_obj2, ...]}.
         """
         print(f"\n[ESCRITA TXT] Iniciando escrita de relatórios por unidade para a pasta: '{self.output_dir}'...")
         
         # --- DEBUG PRINTS INICIAIS DA FUNÇÃO PARA VERIFICAR OS PARÂMETROS RECEBIDOS ---
-        print(f"[DEBUG ESCRITA TXT] all_units_data recebido (len): {len(all_units_data) if all_units_data else 0}")
-        print(f"[DEBUG ESCRITA TXT] all_unique_disciplines recebido (len): {len(all_unique_disciplines) if all_unique_disciplines else 0}")
-        print(f"[DEBUG ESCRITA TXT] discipline_to_courses_map recebido (len): {len(discipline_to_courses_map) if discipline_to_courses_map else 0}")
+        print(f"all_units_data recebido (len): {len(all_units_data) if all_units_data else 0}")
+        print(f"all_unique_disciplines recebido (len): {len(all_unique_disciplines) if all_unique_disciplines else 0}")
+        print(f"discipline_to_courses_map recebido (len): {len(discipline_to_courses_map) if discipline_to_courses_map else 0}")
         # -----------------------------------------------------------------------------
 
         if not all_units_data:
@@ -48,8 +48,7 @@ class ReportWriter:
                         discipline_counts_global.append((discipline_obj, count))
             discipline_counts_global.sort(key=lambda x: x[1], reverse=True)
         
-        print(f"[DEBUG ESCRITA TXT] discipline_counts_global (len APÓS CÁLCULO): {len(discipline_counts_global)}")
-        # print(f"[DEBUG ESCRITA TXT] discipline_counts_global (conteúdo): {discipline_counts_global}") # Pode ser muito grande
+        print(f"discipline_counts_global: {len(discipline_counts_global)}")
 
         for unidade in all_units_data:
             sanitized_unit_name = self._sanitize_filename(unidade.nome)
@@ -57,7 +56,7 @@ class ReportWriter:
             file_path = os.path.join(self.output_dir, file_name)
 
             try:
-                print(f"[DEBUG ESCRITA TXT] Abrindo arquivo para escrita: {file_name}")
+                print(f"Abrindo arquivo para escrita: {file_name}")
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write("="*80 + "\n")
                     f.write(f"  RELATÓRIO DE UNIDADE: {unidade.nome} (Código: {unidade.codigo})\n")
@@ -139,13 +138,12 @@ class ReportWriter:
                             f.write("  Nenhuma disciplina utilizada em múltiplos cursos NESTA unidade.\n")
 
                         # --- Seção: 6. Disciplinas mais comuns (GLOBAL) ---
-                        print(f"[DEBUG ESCRITA TXT] Tentando escrever Seção 6 para {file_name}. (discipline_counts_global len: {len(discipline_counts_global)})")
                         f.write("\n" + "#"*80 + "\n")
-                        f.write("### 6. DISCIPLINAS MAIS COMUNS (GLOBALMENTE - Todos os Cursos Raspados) ###\n\n")
-                        f.write("  Esta seção mostra as disciplinas mais comuns em todos os cursos raspados, não apenas nesta unidade.\n\n")
+                        f.write("### 6. DISCIPLINAS MAIS COMUNS (GLOBALMENTE - Todos os Cursos coletados) ###\n\n")
+                        f.write("  Esta seção mostra as disciplinas mais comuns em todos os cursos coletados, não apenas nesta unidade.\n\n")
                         
                         if not discipline_counts_global:
-                            f.write("  Nenhuma disciplina encontrada nos dados raspados para esta análise global.\n")
+                            f.write("  Nenhuma disciplina encontrada nos dados coletados para esta análise global.\n")
                         else:
                             num_to_display = min(len(discipline_counts_global), 15)
                             f.write(f"  Top {num_to_display} Disciplinas (ordenadas pelo número de cursos em que aparecem):\n")

@@ -1,6 +1,6 @@
-# Manual de Configuração e Uso do Projeto de Raspagem de Dados da USP
+# Manual de Configuração e Uso do Projeto de extração de Dados da USP
 
-Este manual foi criado para guiar qualquer pessoa, mesmo sem conhecimento prévio do projeto, na configuração, execução e compreensão básica do sistema de raspagem de dados da USP. Ele detalha cada passo, desde a preparação do ambiente Python até a execução da raspagem e geração de relatórios.
+Este manual foi criado para guiar qualquer pessoa, mesmo sem conhecimento prévio do projeto, na configuração, execução e compreensão básica do sistema de extração de dados da USP. Ele detalha cada passo, desde a preparação do ambiente Python até a execução da extração e geração de relatórios.
 
 ## Sumário
 
@@ -17,19 +17,18 @@ Este manual foi criado para guiar qualquer pessoa, mesmo sem conhecimento prévi
     d.  **ATENÇÃO: Configurando o Caminho do Executável do Chrome (`binary_location`)**
         i.   Cenário 1: Chrome Instalado em Local Padrão (Recomendado - Abordagem Adotada)
         ii.  Cenário 2: Chrome Instalado em Local Personalizado/Portátil (Como Configurar)
-5.  **Executando o Projeto de Raspagem de Dados**
+5.  **Executando o Projeto de extração de Dados**
     a.  Como Rodar o Script
     b.  Saída no Terminal
     c.  Relatórios Salvos em Pastas (Por Unidade)
 6.  **Estrutura de Pastas e Arquivos do Projeto**
 7.  **Solução de Problemas Comuns *FAQ***
-8.  **Contribuições e Licença**
 
 ---
 
 ## 1. Visão Geral do Projeto
 
-Este projeto consiste em um script Python que utiliza a biblioteca Selenium para automatizar a navegação em um portal de informações da Universidade de São Paulo (USP) e extrair dados sobre os cursos e suas respectivas disciplinas. Os dados raspados são então processados e organizados em relatórios legíveis, facilitando a análise e consulta.
+Este projeto consiste em um script Python que utiliza a biblioteca Selenium para automatizar a navegação em um portal de informações da Universidade de São Paulo (USP) e extrair dados sobre os cursos e suas respectivas disciplinas. Os dados coletados são então processados e organizados em relatórios legíveis, facilitando a análise e consulta.
 
 O objetivo principal é fornecer uma forma eficiente para coletar informações acadêmicas de forma estruturada, que de outra forma seriam de difícil acesso manual em larga escala.
 
@@ -40,7 +39,7 @@ Para executar este projeto, você precisará de:
 * **Sistema Operacional:** Windows, macOS ou Linux (testado e otimizado para Windows via WSL/Linux e linux nativo).
 * **Python:** Versão 3.8 ou superior.
 * **Navegador Web:** Google Chrome instalado.
-* **Conexão com a Internet:** Necessário para baixar dependências e para a raspagem de dados.
+* **Conexão com a Internet:** Necessário para baixar dependências e para a extração de dados.
 
 ## 3. Configuração do Ambiente de Desenvolvimento
 
@@ -52,7 +51,7 @@ Se você ainda não tem Python instalado, siga as instruções abaixo para o seu
 * **macOS:** O macOS geralmente vem com Python pré-instalado, mas é recomendado usar o `brew` para uma versão mais recente: `brew install python`.
 * **Linux (Ubuntu/Debian):** `sudo apt update && sudo apt install python3 python3-pip`.
 
-### b. Criando e Ativando um Ambiente Virtual (RECOMENDADO!)
+### b. Criando e Ativando um Ambiente Virtual
 
 Ambientes virtuais isolam as dependências do seu projeto, evitando conflitos com outras instalações Python no seu sistema.
 
@@ -80,7 +79,7 @@ Ambientes virtuais isolam as dependências do seu projeto, evitando conflitos co
 Com o ambiente virtual ativado, instale as bibliotecas necessárias:
 
 ```bash
-pip install selenium beautifulsoup4 webdriver-manager
+pip install -i requeriments.txt
 ```
 Observações para Linux (especialmente WSL/Ubuntu):
 
@@ -102,10 +101,10 @@ Certifique-se de ter o Google Chrome instalado em seu sistema.
 Windows: Baixe em google.com/chrome.
 macOS: Baixe em google.com/chrome.
 Linux (Ubuntu/Debian):
-```
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+```bash
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
-sudo apt install -f # Para corrigir dependências
+sudo apt install -f
 ```
 
 c. Entendendo e Configurando o ChromeDriver (Gerenciado Automaticamente)
@@ -128,16 +127,14 @@ Abra o arquivo scraper.py no seu editor de texto (VS Code, Sublime Text, Bloco d
 # Trecho relevante do seu scraper.py:
 def iniciar_driver(driver_path=None): # Note que 'driver_path' não é usado aqui para o chromedriver.
     chrome_options = Options()
-    # ESTA É A LINHA QUE VOCÊ PRECISA REVISAR E AJUSTAR:
     chrome_options.binary_location = '/mnt/c/Users/vitor/Downloads/chrome-linux64/chrome-linux64/chrome' # Exemplo de caminho
-    chrome_options.add_argument("--headless=new") # Descomente para rodar em modo headless (sem janela do navegador)
+    chrome_options.add_argument("--headless=new") # Comente para rodar em modo headless (com janela do navegador)
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument(f"--user-data-dir={tempfile.mkdtemp()}")
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0")
-    # ... restante da função
 ```
 
 Você tem duas opções principais para definir este caminho:
@@ -169,7 +166,6 @@ Exemplos de Caminhos:
 Windows:
 
 ```Python
-
 chrome_options.binary_location = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
 # OU (se for uma instalação portátil ou diferente)
 # chrome_options.binary_location = 'D:\\MeuChrome\\chrome.exe'
@@ -178,7 +174,6 @@ Importante: Use barras duplas \\ ou barras simples / para caminhos no Windows pa
 Linux (ou WSL no Windows, apontando para um executável Linux):
 
 ```python
-
 chrome_options.binary_location = '/usr/bin/google-chrome' # Para instalação apt padrão
 # OU (se tiver um Chrome portátil no Linux/WSL)
 # chrome_options.binary_location = '/home/seu_usuario/Downloads/chrome-linux64/chrome-linux64/chrome'
@@ -186,7 +181,7 @@ chrome_options.binary_location = '/usr/bin/google-chrome' # Para instalação ap
 # chrome_options.binary_location = '/mnt/c/Program Files/Google/Chrome/Application/chrome.exe'
 ```
 
-Atenção em WSL: Se o seu Chrome estiver instalado no Windows e você estiver executando o script do WSL, você precisará usar o caminho do Windows com a notação /mnt/c/ (ou a letra da unidade correspondente). O caminho atualmente presente no seu scraper.py (/mnt/c/Users/vitor/Downloads/chrome-linux64/chrome-linux64/chrome) sugere que você usa uma instalação portátil do Chrome no contexto Linux/WSL.
+Atenção em WSL: Se o seu Chrome estiver instalado no Windows e você estiver executando o script do WSL, você precisará usar o caminho do Windows com a notação /mnt/c/ (ou a letra da unidade correspondente). O caminho atualmente presente no scraper.py (/mnt/c/Users/vitor/Downloads/chrome-linux64/chrome-linux64/chrome) sugere o projeto usa uma instalação portátil do Chrome no contexto Linux/WSL.
 
 Verifique o Caminho do Seu Chrome:
 
@@ -194,26 +189,33 @@ Windows: Clique com o botão direito no atalho do Chrome, vá em "Propriedades" 
 Linux: Use which google-chrome ou whereis google-chrome no terminal para encontrar o caminho padrão. Para instalações completas, você saberá onde o colocou.
 Lembre-se de salvar o arquivo scraper.py após fazer a alteração!
 
-## 5. Executando o Projeto de Raspagem de Dados
+## 5. Executando o Projeto de extração de Dados
 
 ### a. Como Rodar o Script
 
 1.  **Certifique-se de que o ambiente virtual esteja ativado** (veja Passo 3.b).
 2.  **Navegue até a pasta raiz do projeto** onde o arquivo `main.py` está localizado.
 3.  **Execute o script principal:**
+    Você pode executar o script main.py de duas maneiras, dependendo da sua necessidade:
+    1. Coletar dados de todas as unidades da USP
+    Para coletar informações de todas as unidades da USP, basta executar o script sem argumentos adicionais:    
     ```bash
     python main.py
     ```
-
+    2. Coletar dados de um número específico de unidades
+    Se você quiser limitar a coleta a uma quantidade específica de unidades, você pode passar o número desejado como um argumento. Por exemplo, para coletar dados de 5 unidades, use:
+    ```bash
+    python main.py 5
+    ```
 ### b. Saída no Terminal
 
-Durante a execução, o script exibirá informações no terminal sobre o progresso da raspagem de dados, incluindo:
+Durante a execução, o script exibirá informações no terminal sobre o progresso da extração de dados, incluindo:
 
 * Mensagens de inicialização do driver.
 * Processamento de cada unidade (Escola, Instituto).
 * Processamento de cada curso dentro das unidades.
 * Mensagens de depuração ("DEBUG") que podem ajudar a entender o fluxo.
-* Um resumo final dos dados raspados (listas de unidades, cursos, disciplinas únicas, disciplinas em múltiplos cursos, e as mais comuns globalmente).
+* Um resumo final dos dados coletados (listas de unidades, cursos, disciplinas únicas, disciplinas em múltiplos cursos, e as mais comuns globalmente).
 
 ### c. Relatórios Salvos em Pastas (Por Unidade)
 
@@ -226,7 +228,7 @@ Além da saída no terminal, o projeto gera relatórios detalhados em arquivos d
     * Lista de todos os cursos oferecidos pela unidade e suas disciplinas.
     * Uma lista de todas as disciplinas únicas encontradas **nesta unidade**.
     * Uma análise das disciplinas que aparecem em múltiplos cursos **desta unidade**.
-    * Uma lista das disciplinas mais comuns (top 15) em **todos os cursos raspados globalmente**.
+    * Uma lista das disciplinas mais comuns (top 15) em **todos os cursos coletados globalmente**.
 
 ## 6. Estrutura de Pastas e Arquivos do Projeto
 
